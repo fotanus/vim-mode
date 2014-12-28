@@ -168,12 +168,16 @@ class MoveUp extends MoveVertically
         range = selection.getBufferRange().copy()
         if range.coversSameRows(@vimState.initialSelectedRange)
           range.start.row--
+          bufferPosition = {row: range.start.row, column: range.start.column}
         else
           if range.start.row < @vimState.initialSelectedRange.start.row
             range.start.row--
+            bufferPosition = {row: range.start.row, column: range.start.column}
           else
             range.end.row--
+            bufferPosition = {row: range.end.row, column: range.end.column}
 
+        @editor.scrollToBufferPosition(bufferPosition, {center: false})
         selection.setBufferRange(range)
       else
         @editor.selectUp()
@@ -196,10 +200,13 @@ class MoveDown extends MoveVertically
         range = selection.getBufferRange().copy()
         if range.start.row < @vimState.initialSelectedRange.start.row
           range.start.row++
+          bufferPosition = {row: range.start.row, column: range.start.column}
         else
           range.end.row++
+          bufferPosition = {row: range.end.row, column: range.end.column}
 
         selection.setBufferRange(range)
+        @editor.scrollToBufferPosition(bufferPosition, {center: false})
       else
         @editor.selectDown()
 
